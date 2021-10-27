@@ -304,10 +304,15 @@ namespace TestApp
         private int GetWaitTime(Arc arc, int passedTime)
         {
             int waitTime = arc.Bus.Arcs.TakeWhile(x => x.StartStation != arc.StartStation).Sum(x => x.Time);
-            waitTime = startTime + passedTime - arc.Bus.StartTime - waitTime;
-            waitTime = waitTime % arc.Bus.TotalTime;
+            waitTime = arc.Bus.StartTime + waitTime - startTime - passedTime;
             if (waitTime < 0)
+            {
+                waitTime = waitTime % arc.Bus.TotalTime;
+            }
+            if (waitTime < 0)
+            {
                 waitTime += arc.Bus.TotalTime;
+            }
             return waitTime;
         }
 
